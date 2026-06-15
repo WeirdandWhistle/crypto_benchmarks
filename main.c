@@ -92,18 +92,22 @@ int main(){
         printf("malloc failed! ciphertext\n");
     }
 
+    printf("Each test encrypts %0.2fGBs of data.\n", (double)message_len / 1000000000.0);
+
     float avg_time = 0;
     int times_ran = 10;
     for(int i = 0; i < times_ran; i++){
+        printf("Running test [%d/%d]: ", i+1, times_ran);
+
         memset(message, i, message_len);
         float start_time = (float)clock()/CLOCKS_PER_SEC;
 
 
-        // libsodium_aes(message, message_len, ciphertext);
+        libsodium_aes(message, message_len, ciphertext);
 
         // libsodium_chacha20poly1305(message, message_len, ciphertext);
 
-        monocypher_chacha20poly1305(message, message_len, ciphertext);
+        // monocypher_chacha20poly1305(message, message_len, ciphertext);
         
         // micro_aes(message, message_len, ciphertext);
 
@@ -111,7 +115,7 @@ int main(){
         float end_time = (float)clock()/CLOCKS_PER_SEC;
         float dif_time = end_time - start_time; 
 
-        printf("dif time %f\n",dif_time);
+        printf("%fs\n",dif_time);
         avg_time += dif_time;
     }
     
