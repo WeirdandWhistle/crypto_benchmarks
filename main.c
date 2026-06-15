@@ -4,9 +4,19 @@
 #include <time.h>
 #include "monocypher.h"
 #include "micro_aes.h"
+#include "stinky_aes_128_gcm_encrypt.h"
 
 
+void stinky_aes(unsigned char* message, unsigned long message_len, unsigned char* ciphertext){
+   
+    unsigned char key[16];
+    unsigned char nonce[12];
 
+    randombytes_buf(key, sizeof key);
+    randombytes_buf(nonce, sizeof nonce);
+
+    temp_AES_GCM(ciphertext, message, message_len, NULL, 0, key, nonce);    
+}
 void micro_aes(unsigned char* message, unsigned long message_len, unsigned char* ciphertext){
    
     unsigned char key[16];
@@ -80,7 +90,7 @@ int main(){
 
 
     unsigned long long message_len = (long) 1 * 1000 * 1000 * 1000;
-    // unsigned long message_len = 1 * 1000 * 1000; // micro_aes
+    // unsigned long message_len = 1 * 1000 * 1000 * 100; // micro_aes
     unsigned char* message = malloc(message_len);
     unsigned char* ciphertext = malloc(message_len + 100);
     unsigned long long ciphertext_len;
@@ -105,11 +115,13 @@ int main(){
 
         libsodium_aes(message, message_len, ciphertext);
 
-        // libsodium_chacha20poly1305(message, message_len, ciphertext);
+        libsodium_chacha20poly1305(message, message_len, ciphertext);
 
         // monocypher_chacha20poly1305(message, message_len, ciphertext);
         
         // micro_aes(message, message_len, ciphertext);
+
+        // stinky_aes(message, message_len, ciphertext);
 
 
         float end_time = (float)clock()/CLOCKS_PER_SEC;

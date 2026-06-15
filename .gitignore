@@ -2,3 +2,4 @@ main
 *.o
 monocypher*
 micro_aes*
+stinky_aes_128_gcm_encrypt*

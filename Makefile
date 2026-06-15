@@ -1,11 +1,12 @@
 src = $(shell find *.c)
 obs = $(subst .c,.o, $(src))
+flags = -O3 -maes -msse4.1 -mpclmul -lsodium -lm
 
 main : $(obs)
-	gcc $(obs) -lsodium -o main
+	gcc $(obs) $(flags) -o main
 
 %.o : %.c
-	gcc -c -o $@ $<
+	gcc $(flags) -c -o $@ $<
 
 clean:
 	rm -f main $(obs)
